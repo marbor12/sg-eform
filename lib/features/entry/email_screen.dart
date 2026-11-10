@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import 'otp_screen.dart';
 
 class EmailScreen extends StatefulWidget {
   const EmailScreen({super.key});
@@ -11,10 +12,14 @@ class EmailScreen extends StatefulWidget {
 class _EmailScreenState extends State<EmailScreen> {
   bool _agree = false;
   final _emailController = TextEditingController();
+  final _otpController = TextEditingController();
+  final _focusNode = FocusNode();
 
   @override
   void dispose() {
     _emailController.dispose();
+    _otpController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -79,6 +84,9 @@ class _EmailScreenState extends State<EmailScreen> {
               ),
               const SizedBox(height: 8),
               TextField(
+                onChanged: (_) {
+                  setState(() {});
+                },
                 controller: _emailController,
                 decoration: InputDecoration(
                   hintText: 'weiling.tan@email.com',
@@ -171,7 +179,16 @@ class _EmailScreenState extends State<EmailScreen> {
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton(
-                  onPressed: _agree ? () {} : null,
+                  onPressed: (_agree && _emailValid)
+                      ? () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                OtpScreen(email: _emailController.text),
+                            ),
+                          );
+                        }
+                      : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     disabledBackgroundColor: AppColors.muted,
