@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/widgets/app_top_bar.dart';
+import '../../core/widgets/app_text_field.dart';
+import 'etb_password_screen.dart';
 
 class EtbLivenessScreen extends StatelessWidget {
   const EtbLivenessScreen({super.key});
@@ -30,9 +32,9 @@ class EtbLivenessScreen extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Liveness lolos (simulasi)'),
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const EtbPasswordScreen(email: 'user@example.com'),
                             ),
                           );
                         },
