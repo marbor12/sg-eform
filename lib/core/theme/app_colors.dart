@@ -7,4 +7,9 @@ class AppColors {
   static const muted = Color(0xFF5B7A80);
   static const border = Color(0xFFD3E2E5);
   static const bg = Color(0xFFF4F8F9);
+  static const soft = Color(0xFFEEF5F6);
+  static const accentSoft = Color(0xFFFFF4EF);
+  static const dotTodo = Color(0xFFC5D6D9);
+  static const success = Color(0xFF1F6B4F);
+  static const successSoft = Color(0xFFE3F2EA);
 }

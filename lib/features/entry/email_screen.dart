@@ -88,6 +88,8 @@ class _EmailScreenState extends State<EmailScreen> {
                   setState(() {});
                 },
                 controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
                   hintText: 'weiling.tan@email.com',
                   hintStyle: const TextStyle(
