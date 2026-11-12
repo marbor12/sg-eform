@@ -2,7 +2,7 @@ class Transaction {
   final String title;
   final String date;
   final String amount;
-  final bool isIncome; 
+  final bool isIncome; // true = uang masuk, false = uang keluar
 
   const Transaction({
     required this.title,

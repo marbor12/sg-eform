@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sg_eform/features/home/home_screen.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/widgets/app_button.dart';
 import '../../core/widgets/icon_circle.dart';
@@ -83,8 +84,9 @@ class EtbSuccessScreen extends StatelessWidget {
           child: AppButton(
             label: 'Masuk ke beranda',
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Halaman beranda belum dibuat')),
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const HomeScreen()),
               );
             },
           ),
