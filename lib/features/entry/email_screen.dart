@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import 'otp_screen.dart';
+import '../../core/widgets/app_button.dart';
+import '../../core/widgets/app_checkbox.dart';
 
 class EmailScreen extends StatefulWidget {
   const EmailScreen({super.key});
@@ -131,50 +133,10 @@ class _EmailScreenState extends State<EmailScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    _agree = !_agree;
-                  });
-                },
-                hoverColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 18,
-                      height: 18,
-                      decoration: BoxDecoration(
-                        color: _agree ? AppColors.primary : Colors.transparent,
-                        borderRadius: BorderRadius.circular(4),
-                        border: Border.all(
-                          color: _agree ? AppColors.primary : AppColors.border,
-                          width: 1.5,
-                        ),
-                      ),
-                      child: _agree
-                          ? const Icon(
-                              Icons.check,
-                              size: 14,
-                              color: Colors.white,
-                            )
-                          : null,
-                    ),
-                    const SizedBox(width: 8),
-                    const Expanded(
-                      child: Text(
-                        'Saya menyetujui Syarat & Ketentuan serta pemrosesan data pribadi (PDPA)',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: AppColors.muted,
-                          height: 1.5,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              AppCheckbox(
+                value: _agree,
+                label: 'Saya menyetujui Syarat & Ketentuan serta pemrosesan data pribadi (PDPA)',
+                onChanged: (v) => setState(() => _agree = v),
               ),
               const SizedBox(height: 16),
               SizedBox(

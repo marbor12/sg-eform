@@ -9,6 +9,7 @@ import '../../core/widgets/icon_circle.dart';
 import 'result_etb_screen.dart';
 import 'result_ntb_screen.dart';
 
+
 class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key, required this.email});
 
