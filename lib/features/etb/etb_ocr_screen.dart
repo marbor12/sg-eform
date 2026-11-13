@@ -5,6 +5,8 @@ import '../../core/widgets/app_button.dart';
 import '../../core/widgets/app_top_bar.dart';
 import 'etb_liveness_screen.dart';
 import '../../core/widgets/id_camera_frame.dart';
+import '../shared/liveness_screen.dart';
+import 'etb_password_screen.dart';
 
 class EtbOcrScreen extends StatelessWidget {
   const EtbOcrScreen({super.key});
@@ -35,8 +37,10 @@ class EtbOcrScreen extends StatelessWidget {
               // 2. banner kecocokan data
               Container(
                 width: double.infinity,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.successSoft,
                   borderRadius: BorderRadius.circular(8),
@@ -44,8 +48,11 @@ class EtbOcrScreen extends StatelessWidget {
                 child: const Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Icons.check_circle,
-                        size: 20, color: AppColors.success),
+                    Icon(
+                      Icons.check_circle,
+                      size: 20,
+                      color: AppColors.success,
+                    ),
                     SizedBox(width: 10),
                     Expanded(
                       child: Column(
@@ -78,8 +85,10 @@ class EtbOcrScreen extends StatelessWidget {
 
               // 3. data nasabah
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   border: Border.all(color: AppColors.border),
                   borderRadius: BorderRadius.circular(8),
@@ -139,11 +148,34 @@ class EtbOcrScreen extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
           child: AppButton(
             label: 'Lanjut',
-            onPressed: () {
-              Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const EtbLivenessScreen()),
-            );
-            },
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => LivenessScreen(
+                  step: 2,
+                  total: 3,
+                  title: 'Toleh ke kiri perlahan',
+                  subtitle:
+                      'Wajah dicocokkan dengan foto di NRIC dan data nasabah.',
+                  pills: const [
+                    LivenessPill('Hadap depan ✓', PillState.done),
+                    LivenessPill('Kedip ✓', PillState.done),
+                    LivenessPill('Toleh kiri', PillState.current),
+                  ],
+                  footer:
+                      'Nasabah existing: tidak perlu validasi cabang bila face match lolos.',
+                  onPassed: (ctx) => Navigator.push(
+                    ctx,
+                    MaterialPageRoute(
+                      // email sementara; nanti dibagikan lewat Riverpod
+                      builder: (_) => const EtbPasswordScreen(
+                        email: 'weiling.tan@email.com',
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
       ),

@@ -5,15 +5,32 @@ import 'package:flutter/services.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/widgets/app_button.dart';
 import '../../core/widgets/app_top_bar.dart';
-import '../../core/widgets/icon_circle.dart';
-import 'result_etb_screen.dart';
-import 'result_ntb_screen.dart';
-
 
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key, required this.email});
+  const OtpScreen({
+    super.key,
+    required this.title,
+    this.step,
+    this.total,
+    required this.heading,
+    required this.intro,
+    required this.target,
+    this.outro = '.',
+    required this.changeLabel,
+    required this.infoText,
+    required this.onVerified,
+  });
 
-  final String email;
+  final String title; // judul di top bar
+  final int? step; // nomor langkah (null = tanpa progres)
+  final int? total;
+  final String heading; // judul besar
+  final String intro; // kalimat sebelum bagian tebal
+  final String target; // bagian tebal (email / nomor HP, sudah disamarkan)
+  final String outro; // kalimat sesudah bagian tebal
+  final String changeLabel; // 'Ganti email' / 'Ganti nomor'
+  final String infoText; // isi kotak info
+  final void Function(BuildContext context) onVerified;
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -129,13 +146,6 @@ class _OtpScreenState extends State<OtpScreen> {
     _showKeyboard();
   }
 
-  // weiling.tan@email.com -> we•••••@email.com
-  String _maskEmail(String email) {
-    final at = email.indexOf('@');
-    if (at < 2) return email;
-    return '${email.substring(0, 2)}•••••${email.substring(at)}';
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,11 +155,15 @@ class _OtpScreenState extends State<OtpScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AppTopBar(title: 'Verifikasi email'),
+              AppTopBar(
+                title: widget.title,
+                step: widget.step,
+                total: widget.total,
+              ),
               const SizedBox(height: 28),
-              const Text(
-                'Masukkan kode OTP',
-                style: TextStyle(
+              Text(
+                widget.heading,
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w800,
                   color: AppColors.primary,
@@ -164,15 +178,15 @@ class _OtpScreenState extends State<OtpScreen> {
                     color: AppColors.muted,
                   ),
                   children: [
-                    const TextSpan(text: 'Kode dikirim ke '),
+                    TextSpan(text: widget.intro),
                     TextSpan(
-                      text: _maskEmail(widget.email),
+                      text: widget.target,
                       style: const TextStyle(
                         fontWeight: FontWeight.w700,
                         color: AppColors.text,
                       ),
                     ),
-                    const TextSpan(text: '. Berlaku 5 menit.'),
+                    TextSpan(text: widget.outro),
                   ],
                 ),
               ),
@@ -244,9 +258,9 @@ class _OtpScreenState extends State<OtpScreen> {
                         ),
                   GestureDetector(
                     onTap: () => Navigator.of(context).pop(),
-                    child: const Text(
-                      'Ganti email',
-                      style: TextStyle(
+                    child: Text(
+                      widget.changeLabel,
+                      style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                         color: AppColors.primary,
@@ -268,9 +282,9 @@ class _OtpScreenState extends State<OtpScreen> {
                   color: AppColors.soft,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Text(
-                  'Setelah terverifikasi, sistem mengecek email ke data nasabah (CIF) untuk menentukan alur: nasabah existing atau nasabah baru.',
-                  style: TextStyle(
+                child: Text(
+                  widget.infoText,
+                  style: const TextStyle(
                     fontSize: 12,
                     height: 1.55,
                     color: AppColors.text,
@@ -286,20 +300,8 @@ class _OtpScreenState extends State<OtpScreen> {
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
           child: AppButton(
             label: 'Verifikasi',
-            onPressed: _complete
-                ? () {
-                    final existing = widget.email.toLowerCase().contains(
-                      'weiling',
-                    );
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => existing
-                            ? const ResultEtbScreen()
-                            : const ResultNtbScreen(),
-                      ),
-                    );
-                  }
-                : null,
+            // _code berisi 6 angka yang diketik (nanti dikirim ke server)
+            onPressed: _complete ? () => widget.onVerified(context) : null,
           ),
         ),
       ),
@@ -363,7 +365,7 @@ class _BlinkingCursorState extends State<_BlinkingCursor>
     with SingleTickerProviderStateMixin {
   late final AnimationController _c = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 300),
+    duration: const Duration(milliseconds: 500),
   )..repeat(reverse: true);
 
   @override

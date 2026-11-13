@@ -4,6 +4,7 @@ import '../../core/widgets/app_text_field.dart';
 import '../../core/widgets/app_top_bar.dart';
 import '../../core/widgets/app_button.dart';
 import '../../core/widgets/id_camera_frame.dart';
+import 'ntb_profile_screen.dart';
 
 class NtbOcrScreen extends StatefulWidget {
   const NtbOcrScreen({super.key});
@@ -106,7 +107,7 @@ class _NtbOcrScreenState extends State<NtbOcrScreen> {
           ),
         ),
       ),
-            bottomNavigationBar: SafeArea(
+      bottomNavigationBar: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
           child: Row(
@@ -129,8 +130,9 @@ class _NtbOcrScreenState extends State<NtbOcrScreen> {
                 child: AppButton(
                   label: 'Data sudah benar',
                   onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Halaman data diri belum dibuat')),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const NtbProfileScreen()),
                     );
                   },
                 ),

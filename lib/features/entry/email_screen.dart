@@ -3,6 +3,9 @@ import '../../core/theme/app_colors.dart';
 import 'otp_screen.dart';
 import '../../core/widgets/app_button.dart';
 import '../../core/widgets/app_checkbox.dart';
+import 'result_etb_screen.dart';
+import 'result_ntb_screen.dart';
+import '../../core/utils/mask.dart';
 
 class EmailScreen extends StatefulWidget {
   const EmailScreen({super.key});
@@ -135,40 +138,46 @@ class _EmailScreenState extends State<EmailScreen> {
             children: [
               AppCheckbox(
                 value: _agree,
-                label: 'Saya menyetujui Syarat & Ketentuan serta pemrosesan data pribadi (PDPA)',
+                label:
+                    'Saya menyetujui Syarat & Ketentuan serta pemrosesan data pribadi (PDPA)',
                 onChanged: (v) => setState(() => _agree = v),
               ),
               const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: ElevatedButton(
-                  onPressed: (_agree && _emailValid)
-                      ? () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                OtpScreen(email: _emailController.text),
+              AppButton(
+                label: 'Kirim Kode OTP',
+                onPressed: (_agree && _emailValid)
+                    ? () {
+                        final email = _emailController.text;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => OtpScreen(
+                              title: 'Verifikasi email',
+                              heading: 'Masukkan kode OTP',
+                              intro: 'Kode dikirim ke ',
+                              target: maskEmail(email),
+                              outro: '. Berlaku 5 menit.',
+                              changeLabel: 'Ganti email',
+                              infoText:
+                                  'Setelah terverifikasi, sistem mengecek email ke data nasabah (CIF) untuk menentukan alur: nasabah existing atau nasabah baru.',
+                              onVerified: (ctx) {
+                                final existing = email.toLowerCase().contains(
+                                  'weiling',
+                                );
+                                Navigator.push(
+                                  ctx,
+                                  MaterialPageRoute(
+                                    builder: (_) => existing
+                                        ? const ResultEtbScreen()
+                                        : const ResultNtbScreen(),
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        }
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    disabledBackgroundColor: AppColors.muted,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text(
-                    'Kirim Kode OTP',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
+                          ),
+                        );
+                      }
+                    : null,
               ),
             ],
           ),
