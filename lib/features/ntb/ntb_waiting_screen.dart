@@ -3,6 +3,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/widgets/app_button.dart';
 import '../../core/widgets/icon_circle.dart';
 import '../../core/widgets/status_timeline.dart' show StepState;
+import 'ntb_password_screen.dart';
 
 class NtbWaitingScreen extends StatelessWidget {
   const NtbWaitingScreen({super.key});
@@ -18,19 +19,29 @@ class NtbWaitingScreen extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(24, 72, 24, 0),
           child: Column(
             children: [
-              // ===== IKON + JUDUL + PARAGRAF =====
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4),
+                            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: Column(
                   children: [
-                    IconCircle(
-                      icon: Icons.schedule_outlined,
-                      color: AppColors.primary,
-                      background: AppColors.soft,
-                      size: 88,
+                    GestureDetector(
+                      // SEMENTARA: tekan lama = simulasi "sudah tervalidasi"
+                      onLongPress: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const NtbPasswordScreen(
+                            email: 'weiling.tan@email.com',
+                          ),
+                        ),
+                      ),
+                      child: const IconCircle(
+                        icon: Icons.schedule_outlined,
+                        color: AppColors.primary,
+                        background: AppColors.soft,
+                        size: 88,
+                      ),
                     ),
-                    SizedBox(height: 14),
-                    Text(
+                    const SizedBox(height: 14),
+                    const Text(
                       'Menunggu validasi cabang',
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -40,8 +51,8 @@ class NtbWaitingScreen extends StatelessWidget {
                         color: AppColors.primary,
                       ),
                     ),
-                    SizedBox(height: 14),
-                    Text(
+                    const SizedBox(height: 14),
+                    const Text(
                       'Pengajuan Anda sedang diperiksa petugas BNI Singapore. '
                       'Kami kirim email & SMS saat sudah tervalidasi, lalu '
                       'Anda bisa membuat password.',
@@ -56,8 +67,6 @@ class NtbWaitingScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-
-              // ===== KARTU NO. REFERENSI =====
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(
@@ -77,7 +86,10 @@ class NtbWaitingScreen extends StatelessWidget {
                       children: [
                         Text(
                           'No. referensi',
-                          style: TextStyle(fontSize: 12, color: AppColors.muted),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: AppColors.muted,
+                          ),
                         ),
                         SizedBox(height: 2),
                         Text(
@@ -175,7 +187,9 @@ class _StepRow extends StatelessWidget {
               fontSize: 14,
               fontWeight: state == StepState.done
                   ? FontWeight.w600
-                  : (state == StepState.now ? FontWeight.w700 : FontWeight.w400),
+                  : (state == StepState.now
+                        ? FontWeight.w700
+                        : FontWeight.w400),
               color: state == StepState.todo ? AppColors.muted : AppColors.text,
             ),
           ),

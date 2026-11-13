@@ -5,17 +5,28 @@ class AppTextField extends StatelessWidget {
   final String label;
   final TextEditingController controller;
   final bool readOnly;
+  final bool obscureText;
   final TextInputType? keyboardType;
-  final Widget? trailing; 
+  final Widget? trailing;
+  final String? errorText;
+  final ValueChanged<String>? onChanged;
 
   const AppTextField({
     super.key,
     required this.label,
     required this.controller,
     this.readOnly = false,
+    this.obscureText = false,
     this.keyboardType,
     this.trailing,
+    this.errorText,
+    this.onChanged,
   });
+
+  OutlineInputBorder _border(Color color, double width) => OutlineInputBorder(
+    borderRadius: BorderRadius.circular(8),
+    borderSide: BorderSide(color: color, width: width),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +45,9 @@ class AppTextField extends StatelessWidget {
         TextField(
           controller: controller,
           readOnly: readOnly,
+          obscureText: obscureText,
           keyboardType: keyboardType,
+          onChanged: onChanged,
           style: TextStyle(
             fontSize: 15,
             color: readOnly ? AppColors.muted : AppColors.text,
@@ -43,6 +56,7 @@ class AppTextField extends StatelessWidget {
             isDense: true,
             filled: readOnly,
             fillColor: AppColors.bg,
+            errorText: errorText,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 14,
               vertical: 12,
@@ -57,21 +71,13 @@ class AppTextField extends StatelessWidget {
               minWidth: 0,
               minHeight: 0,
             ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: AppColors.border),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: AppColors.border),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(
-                color: readOnly ? AppColors.border : AppColors.primary,
-                width: readOnly ? 1 : 2,
-              ),
-            ),
+            border: _border(AppColors.border, 1),
+            enabledBorder: _border(AppColors.border, 1),
+            focusedBorder: readOnly
+                ? _border(AppColors.border, 1)
+                : _border(AppColors.primary, 2),
+            errorBorder: _border(AppColors.error, 1),
+            focusedErrorBorder: _border(AppColors.error, 2),
           ),
         ),
       ],
