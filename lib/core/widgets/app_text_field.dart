@@ -2,34 +2,52 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 
 class AppTextField extends StatelessWidget {
+  final String label;
+  final TextEditingController controller;
+
   const AppTextField({
     super.key,
     required this.label,
-    this.controller,
-    this.hint,
-    this.obscure = false,
-    this.suffix,
-    this.errorText,
-    this.keyboardType,
-    this.onChanged,
+    required this.controller,
   });
-
-  final String label;
-  final TextEditingController? controller;
-  final String? hint;
-  final bool obscure;
-  final Widget? suffix;
-  final String? errorText;
-  final TextInputType? keyboardType;
-  final ValueChanged<String>? onChanged;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        
-        
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: AppColors.muted,
+          ),
+        ),
+        const SizedBox(height: 6),
+        TextField(
+          controller: controller,
+          style: const TextStyle(fontSize: 15, color: AppColors.text),
+          decoration: InputDecoration(
+            isDense: true,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 12,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: AppColors.border),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: AppColors.border),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: AppColors.primary, width: 2),
+            ),
+          ),
+        ),
       ],
     );
   }

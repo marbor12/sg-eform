@@ -3,6 +3,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/widgets/app_button.dart';
 import '../../core/widgets/icon_circle.dart';
 import '../../core/widgets/status_timeline.dart';
+import '../ntb/ntb_type_screen.dart';
 
 class ResultNtbScreen extends StatelessWidget {
   const ResultNtbScreen({super.key});
@@ -81,11 +82,10 @@ class ResultNtbScreen extends StatelessWidget {
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-          child: AppButton(label: 'Buka rekening', onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Halaman jenis nasabah belum dibuat')),
-            );
-          }),
+          child: AppButton(label: 'Buka rekening', onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const NtbTypeScreen())
+          )),
         ),
       ),
     );

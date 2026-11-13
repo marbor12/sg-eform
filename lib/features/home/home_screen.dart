@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/dummy.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -149,25 +150,25 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _Shortcut(
-                      icon: Icons.public,
+                      icon: Icons.public_outlined,
                       label: 'Remittance',
                     ),
                   ),
                   Expanded(
                     child: _Shortcut(
-                      icon: Icons.public,
+                      icon: Icons.notes,
                       label: 'Mutasi',
                     ),
                   ),
                   Expanded(
                     child: _Shortcut(
-                      icon: Icons.wallet_outlined,
+                      icon: Icons.credit_card_outlined,
                       label: 'Rekening',
                     ),
                   ),
                   Expanded(
                     child: _Shortcut(
-                      icon: Icons.public,
+                      icon: Icons.description_outlined,
                       label: 'eForm saya',
                     ),
                   )
@@ -201,6 +202,41 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 24),
             ],
           ),
+        ),
+      ),
+       bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          border: Border(top: BorderSide(color: AppColors.border)),
+        ),
+        child: BottomNavigationBar(
+          currentIndex: 0,
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          selectedItemColor: AppColors.primary,
+          unselectedItemColor: AppColors.muted,
+          selectedFontSize: 11,
+          unselectedFontSize: 11,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w700),
+          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined),
+              label: 'Beranda',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.description_outlined),
+              label: 'eForm',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.notifications_outlined),
+              label: 'Notifikasi',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline),
+              label: 'Profil',
+            ),
+          ],
         ),
       ),
     );
@@ -275,7 +311,7 @@ class _TxRow extends StatelessWidget {
               ],
             ),
           ),
-          Text(
+                    Text(
             tx.amount,
             style: TextStyle(
               fontSize: 14,
