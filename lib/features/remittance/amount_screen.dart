@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'summary_screen.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/money.dart';
 import '../../core/widgets/app_top_bar.dart';
@@ -222,7 +223,12 @@ class _AmountScreenState extends State<AmountScreen> {
               child: AppButton(
                 label: 'Lanjut ke ringkasan',
                 onPressed: () {
-                  // nanti: Navigator.push ke halaman Ringkasan (R3)
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SummaryScreen(),
+                    ),
+                  );
                 },
               ),
             ),
