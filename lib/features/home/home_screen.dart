@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/dummy.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'mutasi_screen.dart';
+import '../../core/widgets/tx_row.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -146,7 +148,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 22),
-              const Row(
+              Row(
                 children: [
                   Expanded(
                     child: _Shortcut(
@@ -158,6 +160,10 @@ class HomeScreen extends StatelessWidget {
                     child: _Shortcut(
                       icon: Icons.notes,
                       label: 'Mutasi',
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const MutasiScreen()),
+                      ),
                     ),
                   ),
                   Expanded(
@@ -198,7 +204,13 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 10),
-              for (final t in dummyTransactions) _TxRow(t),
+              for (final t in dummyTransactions)
+              TxRow(
+                title: t.title,
+                subtitle: t.date,
+                amount: t.amount,
+                isIncome: t.isIncome,
+              ),
               const SizedBox(height: 24),
             ],
           ),
@@ -246,17 +258,24 @@ class HomeScreen extends StatelessWidget {
 class _Shortcut extends StatelessWidget {
   final IconData icon;
   final String label;
+  final VoidCallback? onTap;
 
-  const _Shortcut({required this.icon, required this.label});
+  const _Shortcut({required this.icon, required this.label, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: 52,
-          height: 52,
-          decoration: const BoxDecoration(
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      hoverColor: Colors.transparent,
+      child: Column(
+        children: [
+          Container(
+            width: 52,
+            height: 52,
+            decoration: const BoxDecoration(
             color: AppColors.soft,
             borderRadius: BorderRadius.all(Radius.circular(12)),
           ),
@@ -272,54 +291,6 @@ class _Shortcut extends StatelessWidget {
           ),
         )
       ],
-    );
-  }
-}
-
-class _TxRow extends StatelessWidget {
-  final Transaction tx;
-
-  const _TxRow(this.tx);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.soft)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  tx.title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.text,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  tx.date,
-                  style: const TextStyle(fontSize: 12, color: AppColors.muted),
-                ),
-              ],
-            ),
-          ),
-                    Text(
-            tx.amount,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: tx.isIncome ? AppColors.success : AppColors.text,
-            ),
-          ),
-        ],
       ),
     );
   }
