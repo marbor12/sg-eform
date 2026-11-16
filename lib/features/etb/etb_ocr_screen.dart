@@ -33,8 +33,6 @@ class EtbOcrScreen extends StatelessWidget {
               // 1. area kamera (placeholder)
               IdCameraFrame(hint: 'Arahkan KTP / FIN ke area ini'),
               const SizedBox(height: 14),
-
-              // 2. banner kecocokan data
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(

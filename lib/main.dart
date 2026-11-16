@@ -1,14 +1,16 @@
+import 'dart:ui' show PointerDeviceKind;
 import 'package:flutter/material.dart';
-import 'core/theme/app_colors.dart';
 import 'features/entry/email_screen.dart';
-import 'features/home/home_screen.dart';
-import 'dart:ui' as ui;
 
 void main() {
-  runApp(const MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: EmailScreen(),
-  ));
+  runApp(
+    MaterialApp(
+      debugShowCheckedModeBanner: false,
+      scrollBehavior: const MaterialScrollBehavior().copyWith(
+        scrollbars: false,
+        dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse},
+      ),
+      home: const EmailScreen(),
+    ),
+  );
 }
-
-

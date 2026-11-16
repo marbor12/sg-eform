@@ -3,6 +3,7 @@ import '../../core/theme/app_colors.dart';
 import '../../data/dummy.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'mutasi_screen.dart';
+import '../remittance/recipient_screen.dart';
 import '../../core/widgets/tx_row.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -17,7 +18,6 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ===== HEADER =====
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -154,6 +154,10 @@ class HomeScreen extends StatelessWidget {
                     child: _Shortcut(
                       icon: Icons.public_outlined,
                       label: 'Remittance',
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const RecipientScreen()),
+                      ),
                     ),
                   ),
                   Expanded(
