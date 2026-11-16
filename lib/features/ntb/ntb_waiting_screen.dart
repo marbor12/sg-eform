@@ -4,6 +4,7 @@ import '../../core/widgets/app_button.dart';
 import '../../core/widgets/icon_circle.dart';
 import '../../core/widgets/status_timeline.dart' show StepState;
 import 'ntb_password_screen.dart';
+import '../home/status_screen.dart';
 
 class NtbWaitingScreen extends StatelessWidget {
   const NtbWaitingScreen({super.key});
@@ -135,12 +136,14 @@ class NtbWaitingScreen extends StatelessWidget {
             label: 'Lihat detail status',
             outlined: true,
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Halaman status pengajuan belum dibuat'),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const StatusScreen(),
                 ),
               );
             },
+
           ),
         ),
       ),

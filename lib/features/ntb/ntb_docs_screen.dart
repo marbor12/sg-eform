@@ -6,6 +6,7 @@ import '../../core/widgets/app_checkbox.dart';
 import '../../core/widgets/app_choice.dart';
 import '../../core/widgets/app_text_field.dart';
 import '../../core/widgets/app_top_bar.dart';
+import '../../core/widgets/app_small_button.dart';
 import 'ntb_waiting_screen.dart';
 
 class NtbDocsScreen extends StatefulWidget {
@@ -191,26 +192,7 @@ class _DocRow extends StatelessWidget {
             ],
           ),
         ),
-        if (!done)
-          SizedBox(
-            height: 36,
-            child: ElevatedButton(
-              onPressed: onUpload,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                elevation: 0,
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6),
-                ),
-              ),
-              child: const Text(
-                'Unggah',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
-              ),
-            ),
-          ),
+        if (!done) AppSmallButton(label: 'Unggah', onPressed: onUpload),
       ],
     );
 

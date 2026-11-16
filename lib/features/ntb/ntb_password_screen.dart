@@ -110,7 +110,6 @@ class _NtbPasswordScreenState extends State<NtbPasswordScreen> {
               ),
               const SizedBox(height: 20),
 
-              // ===== JUDUL =====
               const Text(
                 'Buat password',
                 style: TextStyle(
