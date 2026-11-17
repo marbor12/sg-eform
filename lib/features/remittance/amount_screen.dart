@@ -54,7 +54,7 @@ class _AmountScreenState extends State<AmountScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 20),
                     Container(
                       clipBehavior:
                           Clip.antiAlias, // strip ikut terpotong sudut bulat
@@ -66,7 +66,6 @@ class _AmountScreenState extends State<AmountScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // --- bagian 1: Anda kirim ---
                           Padding(
                             padding: const EdgeInsets.fromLTRB(16, 14, 16, 12),
                             child: Column(

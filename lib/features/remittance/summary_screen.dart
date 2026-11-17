@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_colors.dart';
-import '../../core/widgets/app_top_bar.dart';
-import '../../core/widgets/app_button.dart';
-import '../../core/widgets/app_checkbox.dart';
+import 'package:sg_eform/core/core.dart';
 import '../entry/otp_screen.dart';
 import '../remittance/remittance_status_screen.dart';
 
@@ -67,9 +64,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 16),
-
-                    // ===== TOTAL (tengah, tanpa kotak) =====
+                    const SizedBox(height: 20),
                     const Center(
                       child: Text(
                         'Total didebet',

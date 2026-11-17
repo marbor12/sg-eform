@@ -48,6 +48,7 @@ class _RecipientScreenState extends State<RecipientScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SizedBox(height: 20),
                     const Text(
                       'Penerima tersimpan',
                       style: TextStyle(
