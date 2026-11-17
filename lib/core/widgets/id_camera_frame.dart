@@ -6,15 +6,20 @@ import 'live_camera.dart';
 
 class IdCameraFrame extends StatelessWidget {
   final String hint;
+  final void Function(CameraController)? onCameraReady;
 
-  const IdCameraFrame({super.key, required this.hint});
+  const IdCameraFrame({
+    super.key, 
+    required this.hint,
+    this.onCameraReady,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 210,
       width: double.infinity,
-      clipBehavior: Clip.antiAlias, // potong kamera mengikuti sudut bulat
+      clipBehavior: Clip.antiAlias, 
       decoration: BoxDecoration(
         color: AppColors.text,
         borderRadius: BorderRadius.circular(12),
@@ -22,10 +27,8 @@ class IdCameraFrame extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          // 1. paling bawah: pratinjau kamera belakang
-          const LiveCamera(lens: CameraLensDirection.back),
+          LiveCamera(lens: CameraLensDirection.back, onReady: onCameraReady),
 
-          // 2. di atasnya: bingkai + petunjuk
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
