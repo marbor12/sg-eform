@@ -1,9 +1,20 @@
 import 'dart:ui' show PointerDeviceKind;
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'features/entry/email_screen.dart';
 import 'core/theme/app_colors.dart';
+import 'features/entry/email_screen.dart';
 
-void main() {
+List<CameraDescription> cameras = [];
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    cameras = await availableCameras();
+  } catch (_) {
+    cameras = []; // perangkat tanpa kamera atau izin ditolak
+  }
+
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
