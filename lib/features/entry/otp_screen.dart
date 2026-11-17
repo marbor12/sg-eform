@@ -297,7 +297,12 @@ class _OtpScreenState extends State<OtpScreen> {
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+          padding: EdgeInsets.fromLTRB(
+            24,
+            0,
+            24,
+            24 + MediaQuery.of(context).viewInsets.bottom,
+          ),
           child: AppButton(
             label: 'Verifikasi',
             // _code berisi 6 angka yang diketik (nanti dikirim ke server)

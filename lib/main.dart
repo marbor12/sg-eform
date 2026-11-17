@@ -20,6 +20,11 @@ Future<void> main() async {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor:
+              Colors.transparent, // Background pembungkus jadi transparan
+          elevation: 0, // Menghilangkan bayangan/shadow
+        ),
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppColors.primary,
           surface: Colors.white,

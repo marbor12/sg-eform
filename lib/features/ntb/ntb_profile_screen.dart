@@ -179,7 +179,7 @@ class _NtbProfileScreenState extends State<NtbProfileScreen> {
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+          padding: EdgeInsets.fromLTRB(24, 0, 24, 24 + MediaQuery.of(context).viewInsets.bottom,),
           child: AppButton(
             label: 'Kirim OTP ke No. HP',
             onPressed: () => Navigator.push(

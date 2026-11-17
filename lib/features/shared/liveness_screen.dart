@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
+import '../../core/widgets/live_camera.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/widgets/app_top_bar.dart';
 
@@ -55,15 +57,12 @@ class LivenessScreen extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // TODO: ganti dengan hasil SDK liveness. Sementara,
-                      // ketuk lingkaran untuk mensimulasikan lolos.
                       GestureDetector(
                         onTap: () => onPassed(context),
                         child: Container(
                           width: 280,
                           height: 280,
                           clipBehavior: Clip.antiAlias,
-                          alignment: Alignment.center,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: const Color(0x0DFFFFFF),
@@ -72,9 +71,19 @@ class LivenessScreen extends StatelessWidget {
                               width: 4,
                             ),
                           ),
-                          child: CustomPaint(
-                            size: const Size(120, 140),
-                            painter: _FacePainter(),
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              // lapisan bawah: kamera depan
+                              const LiveCamera(lens: CameraLensDirection.front),
+                              // lapisan atas: siluet pemandu
+                              Center(
+                                child: CustomPaint(
+                                  size: const Size(120, 140),
+                                  painter: _FacePainter(),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -165,11 +174,7 @@ class _Pill extends StatelessWidget {
       ),
       child: Text(
         data.label,
-        style: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-          color: fg,
-        ),
+        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: fg),
       ),
     );
   }

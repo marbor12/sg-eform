@@ -16,7 +16,6 @@ class NtbPasswordScreen extends StatefulWidget {
 }
 
 class _NtbPasswordScreenState extends State<NtbPasswordScreen> {
-  
   static const _banned = ['weiling', '14031990', '1990'];
 
   final _pw = TextEditingController();
@@ -128,7 +127,9 @@ class _NtbPasswordScreenState extends State<NtbPasswordScreen> {
                     color: AppColors.muted,
                   ),
                   children: [
-                    const TextSpan(text: 'Untuk masuk ke aplikasi dengan email '),
+                    const TextSpan(
+                      text: 'Untuk masuk ke aplikasi dengan email ',
+                    ),
                     TextSpan(
                       text: maskEmail(widget.email),
                       style: const TextStyle(
@@ -178,7 +179,10 @@ class _NtbPasswordScreenState extends State<NtbPasswordScreen> {
                     const SizedBox(height: 8),
                     _Rule(_okMix, 'Huruf besar, kecil, angka & simbol'),
                     const SizedBox(height: 8),
-                    _Rule(_okNoPersonal, 'Tidak mengandung nama / tanggal lahir'),
+                    _Rule(
+                      _okNoPersonal,
+                      'Tidak mengandung nama / tanggal lahir',
+                    ),
                   ],
                 ),
               ),
@@ -194,15 +198,20 @@ class _NtbPasswordScreenState extends State<NtbPasswordScreen> {
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
+          padding: EdgeInsets.fromLTRB(
+            24,
+            0,
+            24,
+            24 + MediaQuery.of(context).viewInsets.bottom,
+          ),
           child: AppButton(
             label: 'Simpan & masuk',
             onPressed: _valid
                 ? () => Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => const HomeScreen()),
-                      (route) => false,
-                    )
+                    context,
+                    MaterialPageRoute(builder: (_) => const HomeScreen()),
+                    (route) => false,
+                  )
                 : null,
           ),
         ),
@@ -211,7 +220,6 @@ class _NtbPasswordScreenState extends State<NtbPasswordScreen> {
   }
 }
 
-/// Satu baris syarat: ✓ hijau kalau terpenuhi, ○ abu kalau belum.
 class _Rule extends StatelessWidget {
   const _Rule(this.ok, this.text);
 

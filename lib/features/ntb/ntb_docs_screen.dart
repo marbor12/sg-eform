@@ -133,7 +133,12 @@ class _NtbDocsScreenState extends State<NtbDocsScreen> {
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 14, 20, 24),
+          padding: EdgeInsets.fromLTRB(
+            20,
+            14,
+            20,
+            24 + MediaQuery.of(context).viewInsets.bottom,
+          ),
           child: AppButton(
             label: 'Kirim pengajuan',
             onPressed: _canSubmit

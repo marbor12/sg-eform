@@ -241,12 +241,18 @@ class _EtbPasswordScreenState extends State<EtbPasswordScreen> {
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+          padding: EdgeInsets.fromLTRB(
+            24,
+            0,
+            24,
+            24 + MediaQuery.of(context).viewInsets.bottom,
+          ),
           child: AppButton(
             label: 'Masuk',
             loading: _loading,
-            onPressed:
-                (_passwordController.text.isEmpty || _locked) ? null : _submit,
+            onPressed: (_passwordController.text.isEmpty || _locked)
+                ? null
+                : _submit,
           ),
         ),
       ),

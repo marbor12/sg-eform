@@ -109,7 +109,12 @@ class _NtbOcrScreenState extends State<NtbOcrScreen> {
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+          padding: EdgeInsets.fromLTRB(
+            24,
+            0,
+            24,
+            24 + MediaQuery.of(context).viewInsets.bottom,
+          ),
           child: Row(
             children: [
               Expanded(
@@ -132,7 +137,9 @@ class _NtbOcrScreenState extends State<NtbOcrScreen> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const NtbProfileScreen()),
+                      MaterialPageRoute(
+                        builder: (_) => const NtbProfileScreen(),
+                      ),
                     );
                   },
                 ),
