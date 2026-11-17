@@ -20,7 +20,7 @@ class NtbWaitingScreen extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(24, 72, 24, 0),
           child: Column(
             children: [
-                            Padding(
+              Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: Column(
                   children: [
@@ -138,12 +138,9 @@ class NtbWaitingScreen extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => const StatusScreen(),
-                ),
+                MaterialPageRoute(builder: (_) => const StatusScreen()),
               );
             },
-
           ),
         ),
       ),

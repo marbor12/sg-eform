@@ -4,6 +4,7 @@ import '../../core/widgets/app_top_bar.dart';
 import '../../core/widgets/app_button.dart';
 import '../../core/widgets/app_checkbox.dart';
 import '../entry/otp_screen.dart';
+import '../remittance/remittance_status_screen.dart';
 
 class SummaryScreen extends StatefulWidget {
   const SummaryScreen({super.key});
@@ -39,9 +40,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
           infoText:
               'OTP dipakai untuk mengonfirmasi pengajuan eForm remittance.',
           onVerified: (ctx) {
-            // nanti: buka halaman Status eForm (R4)
-            ScaffoldMessenger.of(ctx).showSnackBar(
-              const SnackBar(content: Text('eForm terkirim (R4 menyusul)')),
+            Navigator.pushAndRemoveUntil(
+              ctx,
+              MaterialPageRoute(builder: (_) => const RemittanceStatusScreen()),
+              (route) => false, 
             );
           },
         ),
@@ -110,8 +112,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       ),
                     ),
                     const SizedBox(height: 14),
-
-                    // ===== CATATAN =====
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
