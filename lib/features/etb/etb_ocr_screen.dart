@@ -152,16 +152,8 @@ class EtbOcrScreen extends StatelessWidget {
                 builder: (_) => LivenessScreen(
                   step: 2,
                   total: 3,
-                  title: 'Toleh ke kiri perlahan',
-                  subtitle:
-                      'Wajah dicocokkan dengan foto di NRIC dan data nasabah.',
-                  pills: const [
-                    LivenessPill('Hadap depan ✓', PillState.done),
-                    LivenessPill('Kedip ✓', PillState.done),
-                    LivenessPill('Toleh kiri', PillState.current),
-                  ],
-                  footer:
-                      'Nasabah existing: tidak perlu validasi cabang bila face match lolos.',
+                  subtitle: 'Wajah dicocokkan dengan foto di NRIC dan data nasabah.',
+                  footer: 'Nasabah existing: tidak perlu validasi cabang bila face match lolos.',
                   onPassed: (ctx) => Navigator.push(
                     ctx,
                     MaterialPageRoute(

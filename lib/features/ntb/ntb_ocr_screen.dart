@@ -19,7 +19,8 @@ class NtbOcrScreen extends StatefulWidget {
 }
 
 class _NtbOcrScreenState extends State<NtbOcrScreen> {
-  static const double _footerSpace = 96;
+  static const double _footerSpace = 96; // ruang untuk tombol (keyboard tutup)
+  static const double _footerHeight = 64; // ruang untuk tombol (keyboard buka)
 
   final _name = TextEditingController();
   final _id = TextEditingController();
@@ -113,6 +114,7 @@ class _NtbOcrScreenState extends State<NtbOcrScreen> {
   @override
   Widget build(BuildContext context) {
     final allFound = _found == 3;
+    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
     return Scaffold(
       body: SafeArea(
@@ -129,108 +131,117 @@ class _NtbOcrScreenState extends State<NtbOcrScreen> {
             Expanded(
               child: Stack(
                 children: [
-                  SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(
-                      20,
-                      14,
-                      20,
-                      _footerSpace,
-                    ),
-                    keyboardDismissBehavior:
-                        ScrollViewKeyboardDismissBehavior.onDrag,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        IdCameraFrame(
-                          hint: _hasScanned
-                              ? 'Hasil pindai di bawah · periksa & koreksi'
-                              : 'Posisikan sisi depan NRIC lalu tekan Pindai',
-                          onCameraReady: (c) => _camera = c,
-                        ),
-                        const SizedBox(height: 14),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const Text(
-                              'Hasil OCR — periksa & koreksi',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.text,
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: !_hasScanned
-                                    ? AppColors.soft
-                                    : allFound
-                                    ? AppColors.successSoft
-                                    : AppColors.accentSoft,
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: Text(
-                                !_hasScanned
-                                    ? 'Belum dipindai'
-                                    : '$_found/3 terbaca',
+                  // Area scroll. Saat keyboard terbuka, berhenti di atas tombol
+                  // supaya textfield tidak tertutup.
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: keyboardOpen ? _footerHeight : 0,
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.fromLTRB(
+                        20,
+                        14,
+                        20,
+                        keyboardOpen ? 14 : _footerSpace,
+                      ),
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          IdCameraFrame(
+                            hint: _hasScanned
+                                ? 'Hasil pindai di bawah · periksa & koreksi'
+                                : 'Posisikan sisi depan NRIC lalu tekan Pindai',
+                            onCameraReady: (c) => _camera = c,
+                          ),
+                          const SizedBox(height: 14),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Hasil OCR — periksa & koreksi',
                                 style: TextStyle(
-                                  fontSize: 12,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w700,
-                                  color: !_hasScanned
-                                      ? AppColors.muted
-                                      : allFound
-                                      ? AppColors.success
-                                      : AppColors.accentDark,
+                                  color: AppColors.text,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 14),
-                        AppTextField(
-                          label: 'Nama sesuai ID',
-                          controller: _name,
-                          onChanged: (_) => setState(() {}),
-                        ),
-                        const SizedBox(height: 14),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: AppTextField(
-                                label: 'NRIC / FIN',
-                                controller: _id,
-                                onChanged: (_) => setState(() {}),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: !_hasScanned
+                                      ? AppColors.soft
+                                      : allFound
+                                      ? AppColors.successSoft
+                                      : AppColors.accentSoft,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  !_hasScanned
+                                      ? 'Belum dipindai'
+                                      : '$_found/3 terbaca',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                    color: !_hasScanned
+                                        ? AppColors.muted
+                                        : allFound
+                                        ? AppColors.success
+                                        : AppColors.accentDark,
+                                  ),
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: AppTextField(
-                                label: 'Tanggal lahir',
-                                controller: _dob,
-                                onChanged: (_) => setState(() {}),
+                            ],
+                          ),
+                          const SizedBox(height: 14),
+                          AppTextField(
+                            label: 'Nama sesuai ID',
+                            controller: _name,
+                            onChanged: (_) => setState(() {}),
+                          ),
+                          const SizedBox(height: 14),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: AppTextField(
+                                  label: 'NRIC / FIN',
+                                  controller: _id,
+                                  onChanged: (_) => setState(() {}),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 14),
-                        AppTextField(
-                          label: 'Kewarganegaraan',
-                          controller: _nationality,
-                        ),
-                        const SizedBox(height: 14),
-                        AppTextField(
-                          label: 'Alamat (isi manual)',
-                          controller: _address,
-                        ),
-                      ],
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: AppTextField(
+                                  label: 'Tanggal lahir',
+                                  controller: _dob,
+                                  onChanged: (_) => setState(() {}),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 14),
+                          AppTextField(
+                            label: 'Kewarganegaraan',
+                            controller: _nationality,
+                          ),
+                          const SizedBox(height: 14),
+                          AppTextField(
+                            label: 'Alamat (isi manual)',
+                            controller: _address,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
 
+                  // Tombol melayang di bawah
                   Positioned(
                     left: 0,
                     right: 0,
@@ -255,7 +266,7 @@ class _NtbOcrScreenState extends State<NtbOcrScreen> {
                             child: AppButton(
                               label: 'Data sudah benar',
                               onPressed: _canContinue
-                                  ? () => Navigator.push(
+                                  ? () => Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                         builder: (_) =>

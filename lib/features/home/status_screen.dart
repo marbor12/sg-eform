@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' hide StepState;
 import '../../core/theme/app_colors.dart';
 import '../../core/widgets/app_small_button.dart';
 import '../../core/widgets/status_timeline.dart';
+import 'package:file_picker/file_picker.dart';
 
 class StatusScreen extends StatelessWidget {
   const StatusScreen({super.key});
@@ -72,10 +73,18 @@ class StatusScreen extends StatelessWidget {
                     AppSmallButton(
                       label: 'Unggah dokumen', 
                       height: 38,
-                      onPressed: () {
+                      onPressed: () async {
+                        final result = await FilePicker.pickFiles(
+                          type: FileType.custom,
+                          allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
+                        );
+                        if (result == null) return;
+                        if (!context.mounted) return;
+
+                        final file = result.single;
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Pemilih file belum tersedia'),
+                          SnackBar(
+                            content: Text('Dipilih: ${file.name}'),
                           ),
                         );
                       }

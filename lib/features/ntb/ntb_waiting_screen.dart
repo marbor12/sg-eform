@@ -25,8 +25,7 @@ class NtbWaitingScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     GestureDetector(
-                      // SEMENTARA: tekan lama = simulasi "sudah tervalidasi"
-                      onLongPress: () => Navigator.push(
+                      onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (_) => const NtbPasswordScreen(

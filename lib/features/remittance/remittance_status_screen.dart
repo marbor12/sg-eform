@@ -9,10 +9,9 @@ class RemittanceStatusScreen extends StatelessWidget {
   const RemittanceStatusScreen({super.key});
 
   void _goHome(BuildContext context) {
-    Navigator.pushAndRemoveUntil(
-      context,
+    debugPrint('>>> TOMBOL BERANDA DIKLIK <<<');
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (_) => const HomeScreen()),
-      (route) => false,
     );
   }
 

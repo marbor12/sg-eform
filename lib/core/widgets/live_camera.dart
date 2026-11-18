@@ -4,13 +4,15 @@ import '../theme/app_colors.dart';
 
 class LiveCamera extends StatefulWidget {
   final CameraLensDirection lens;
-  final void Function(CameraController)? onReady;
+  final void Function(CameraController controller)? onReady;
+  final ImageFormatGroup? imageFormatGroup;
 
   const LiveCamera({
     super.key, 
     this.lens = CameraLensDirection.back,
     this.onReady,
-    });
+    this.imageFormatGroup,
+  });
 
   @override
   State<LiveCamera> createState() => _LiveCameraState();
@@ -42,6 +44,7 @@ class _LiveCameraState extends State<LiveCamera> {
         cam,
         ResolutionPreset.medium,
         enableAudio: false,
+        imageFormatGroup: widget.imageFormatGroup,
       );
       await controller.initialize();
       if (!mounted) {

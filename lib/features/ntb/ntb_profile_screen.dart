@@ -201,17 +201,9 @@ class _NtbProfileScreenState extends State<NtbProfileScreen> {
                       builder: (_) => LivenessScreen(
                         step: 4,
                         total: 5,
-                        title: 'Kedipkan mata perlahan',
-                        subtitle:
-                            'Pastikan wajah di dalam bingkai, cahaya cukup, dan tanpa kacamata gelap.',
-                        pills: const [
-                          LivenessPill('Hadap depan ✓', PillState.done),
-                          LivenessPill('Kedip', PillState.current),
-                          LivenessPill('Toleh kiri', PillState.todo),
-                        ],
-                        footer:
-                            'Foto wajah dicocokkan dengan foto di NRIC (face match). Hasil dikirim ke back office untuk ditinjau.',
-                        onPassed: (ctx2) => Navigator.push(
+                        subtitle: 'Pastikan wajah di dalam bingkai, cahaya cukup, dan tanpa kacamata gelap.',
+                        footer: 'Foto wajah dicocokkan dengan foto di NRIC (face match). Hasil dikirim ke back office untuk ditinjau.',
+                        onPassed: (ctx2) => Navigator.pushReplacement(
                           ctx2,
                           MaterialPageRoute(builder: (_) => const NtbDocsScreen()),
                         )

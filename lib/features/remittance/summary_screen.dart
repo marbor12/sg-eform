@@ -34,13 +34,11 @@ class _SummaryScreenState extends State<SummaryScreen> {
           intro: 'Kode 6 digit dikirim via SMS ke ',
           target: '+65 9••• ••21',
           changeLabel: 'Ganti nomor',
-          infoText:
-              'OTP dipakai untuk mengonfirmasi pengajuan eForm remittance.',
+          infoText: 'OTP dipakai untuk mengonfirmasi pengajuan eForm remittance.',
           onVerified: (ctx) {
-            Navigator.pushAndRemoveUntil(
+            Navigator.pushReplacement(
               ctx,
               MaterialPageRoute(builder: (_) => const RemittanceStatusScreen()),
-              (route) => false, 
             );
           },
         ),

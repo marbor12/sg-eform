@@ -1,6 +1,7 @@
 import 'dart:ui' show PointerDeviceKind;
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:sg_eform/features/entry/email_screen.dart';
 import 'core/theme/app_colors.dart';
 import 'features/entry/email_screen.dart';
 
