@@ -42,7 +42,7 @@ class _EmailScreenState extends State<EmailScreen> {
               'Setelah terverifikasi, sistem mengecek email ke data nasabah (CIF) untuk menentukan alur: nasabah existing atau nasabah baru.',
           onVerified: (ctx) {
             final existing = email.toLowerCase().contains('weiling');
-            Navigator.push(
+            Navigator.pushReplacement(
               ctx,
               MaterialPageRoute(
                 builder: (_) => existing

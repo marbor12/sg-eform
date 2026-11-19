@@ -14,17 +14,20 @@ class NtbWaitingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(24, 72, 24, 0),
-          child: Column(
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(24, 72, 24, 0),
+            child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: Column(
                   children: [
                     GestureDetector(
+                      // SEMENTARA: ketuk = simulasi "sudah tervalidasi"
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -143,8 +146,9 @@ class NtbWaitingScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
 
 /// Satu baris langkah: titik + teks (tanpa garis penghubung).

@@ -18,6 +18,9 @@ class _EtbPasswordScreenState extends State<EtbPasswordScreen> {
   // password palsu untuk latihan; nanti diganti pemeriksaan server
   static const _dummyPassword = 'Contoh123!';
 
+  static const double _footerSpace = 96; // ruang tombol (keyboard tutup)
+  static const double _footerHeight = 64; // ruang tombol (keyboard buka)
+
   final _passwordController = TextEditingController();
   bool _hidden = true;
   bool _biometric = false;
@@ -74,186 +77,212 @@ class _EtbPasswordScreenState extends State<EtbPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const AppTopBar(title: 'Masukkan password', step: 3, total: 3),
-              const SizedBox(height: 16),
-              const Text(
-                'Halo, Wei Ling',
-                style: TextStyle(
-                  fontSize: 24,
-                  height: 1.3,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.primary,
+        child: Stack(
+          children: [
+            // Area scroll: berhenti di atas tombol saat keyboard terbuka
+            Positioned(
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: keyboardOpen ? _footerHeight : 0,
+              child: SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(
+                  24,
+                  24,
+                  24,
+                  keyboardOpen ? 16 : _footerSpace,
                 ),
-              ),
-              const SizedBox(height: 16),
-              Text.rich(
-                TextSpan(
-                  style: const TextStyle(
-                    fontSize: 14,
-                    height: 1.55,
-                    color: AppColors.muted,
-                  ),
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const TextSpan(
-                      text:
-                          'Masukkan password akun BNI Singapore yang sudah Anda miliki untuk ',
+                    const AppTopBar(
+                      title: 'Masukkan password',
+                      step: 3,
+                      total: 3,
                     ),
-                    TextSpan(
-                      text: _maskEmail(widget.email),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w700,
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Halo, Wei Ling',
+                      style: TextStyle(
+                        fontSize: 24,
+                        height: 1.3,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text.rich(
+                      TextSpan(
+                        style: const TextStyle(
+                          fontSize: 14,
+                          height: 1.55,
+                          color: AppColors.muted,
+                        ),
+                        children: [
+                          const TextSpan(
+                            text:
+                                'Masukkan password akun BNI Singapore yang sudah Anda miliki untuk ',
+                          ),
+                          TextSpan(
+                            text: _maskEmail(widget.email),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.text,
+                            ),
+                          ),
+                          const TextSpan(text: '.'),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Password',
+                      style: TextStyle(
+                        fontSize: 12,
+                        height: 1.55,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.text,
                       ),
                     ),
-                    const TextSpan(text: '.'),
+                    const SizedBox(height: 6),
+                    TextField(
+                      controller: _passwordController,
+                      obscureText: _hidden,
+                      enabled: !_locked,
+                      onChanged: (_) {
+                        setState(() {
+                          if (!_locked) _error = null;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        errorText: _error,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: const BorderSide(
+                            color: AppColors.border,
+                            width: 1,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: const BorderSide(
+                            color: AppColors.primary,
+                            width: 2,
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: const BorderSide(
+                            color: AppColors.error,
+                            width: 1,
+                          ),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: const BorderSide(
+                            color: AppColors.error,
+                            width: 2,
+                          ),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _hidden
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
+                            color: AppColors.muted,
+                          ),
+                          onPressed: () => setState(() => _hidden = !_hidden),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    // petunjuk sementara untuk latihan, hapus nanti
+                    const Text(
+                      'Password latihan: Contoh123!',
+                      style: TextStyle(fontSize: 11, color: AppColors.muted),
+                    ),
+                    const SizedBox(height: 8),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: InkWell(
+                        onTap: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Halaman reset password belum dibuat',
+                              ),
+                            ),
+                          );
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Text(
+                            'Lupa password?',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.primary,
+                              decoration: TextDecoration.underline,
+                              decorationColor: AppColors.primary,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.soft,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Text(
+                        'Maksimal 3 kali salah. Setelah itu akun akan terkunci sementara dan perlu reset password.',
+                        style: TextStyle(
+                          fontSize: 12,
+                          height: 1.55,
+                          color: AppColors.text,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    AppCheckbox(
+                      value: _biometric,
+                      label: 'Aktifkan login biometrik',
+                      onChanged: (v) => setState(() => _biometric = v),
+                    ),
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
-              const Text(
-                'Password',
-                style: TextStyle(
-                  fontSize: 12,
-                  height: 1.55,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.text,
+            ),
+
+            // Tombol melayang di bawah
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
+                child: AppButton(
+                  label: 'Masuk',
+                  loading: _loading,
+                  onPressed: (_passwordController.text.isEmpty || _locked)
+                      ? null
+                      : _submit,
                 ),
               ),
-              const SizedBox(height: 6),
-              TextField(
-                controller: _passwordController,
-                obscureText: _hidden,
-                enabled: !_locked,
-                onChanged: (_) {
-                  setState(() {
-                    if (!_locked) _error = null;
-                  });
-                },
-                decoration: InputDecoration(
-                  errorText: _error,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: AppColors.border,
-                      width: 1,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: AppColors.primary,
-                      width: 2,
-                    ),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: AppColors.error,
-                      width: 1,
-                    ),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: AppColors.error,
-                      width: 2,
-                    ),
-                  ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _hidden
-                          ? Icons.visibility_outlined
-                          : Icons.visibility_off_outlined,
-                      color: AppColors.muted,
-                    ),
-                    onPressed: () => setState(() => _hidden = !_hidden),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 6),
-              // petunjuk sementara untuk latihan, hapus nanti
-              const Text(
-                'Password latihan: Contoh123!',
-                style: TextStyle(fontSize: 11, color: AppColors.muted),
-              ),
-              const SizedBox(height: 8),
-              Align(
-                alignment: Alignment.centerRight,
-                child: InkWell(
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Halaman reset password belum dibuat'),
-                      ),
-                    );
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8),
-                    child: Text(
-                      'Lupa password?',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.primary,
-                        decoration: TextDecoration.underline,
-                        decorationColor: AppColors.primary,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 12,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.soft,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Text(
-                  'Maksimal 3 kali salah. Setelah itu akun akan terkunci sementara dan perlu reset password.',
-                  style: TextStyle(
-                    fontSize: 12,
-                    height: 1.55,
-                    color: AppColors.text,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              AppCheckbox(
-                value: _biometric,
-                label: 'Aktifkan login biometrik',
-                onChanged: (v) => setState(() => _biometric = v),
-              ),
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(
-            24,
-            0,
-            24,
-            24 + MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: AppButton(
-            label: 'Masuk',
-            loading: _loading,
-            onPressed: (_passwordController.text.isEmpty || _locked)
-                ? null
-                : _submit,
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -195,7 +195,7 @@ class _NtbProfileScreenState extends State<NtbProfileScreen> {
                   changeLabel: 'Ganti nomor',
                   infoText:
                       'No. HP terverifikasi dipakai untuk OTP transaksi dan notifikasi status pengajuan.',
-                  onVerified: (ctx) => Navigator.push(
+                  onVerified: (ctx) => Navigator.pushReplacement(
                     ctx,
                     MaterialPageRoute(
                       builder: (_) => LivenessScreen(

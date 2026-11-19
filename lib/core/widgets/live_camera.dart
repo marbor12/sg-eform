@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 
@@ -8,7 +9,7 @@ class LiveCamera extends StatefulWidget {
   final ImageFormatGroup? imageFormatGroup;
 
   const LiveCamera({
-    super.key, 
+    super.key,
     this.lens = CameraLensDirection.back,
     this.onReady,
     this.imageFormatGroup,
@@ -19,8 +20,13 @@ class LiveCamera extends StatefulWidget {
 }
 
 class _LiveCameraState extends State<LiveCamera> {
+  static Future<void>? _pendingDisposal;
+  static CameraController? _activeGlobalController;
+  static int _globalSession = 0;
+
   CameraController? _controller;
   String? _error;
+  bool _isDisposed = false;
 
   @override
   void initState() {
@@ -29,10 +35,36 @@ class _LiveCameraState extends State<LiveCamera> {
   }
 
   Future<void> _init() async {
+    final session = ++_globalSession;
+
+    // 1. Tunggu proses dispose kamera sebelumnya tuntas (terutama di Chrome Web)
+    if (_pendingDisposal != null) {
+      try {
+        await _pendingDisposal;
+      } catch (_) {}
+      _pendingDisposal = null;
+    }
+
+    // 2. Jika ada controller kamera lain yang masih aktif, lepaskan dulu
+    if (_activeGlobalController != null) {
+      final old = _activeGlobalController;
+      _activeGlobalController = null;
+      await _safeRelease(old);
+    }
+
+    // 3. Beri jeda singkat khusus Web agar Chrome benar-benar melepas hardware lock webcam
+    if (kIsWeb) {
+      await Future.delayed(const Duration(milliseconds: 250));
+    }
+
+    if (!mounted || _isDisposed || session != _globalSession) return;
+
     try {
       final all = await availableCameras();
       if (all.isEmpty) {
-        if (mounted) setState(() => _error = 'Kamera tidak ditemukan.');
+        if (mounted && session == _globalSession) {
+          setState(() => _error = 'Kamera tidak ditemukan.');
+        }
         return;
       }
       // pilih kamera sesuai arah; kalau tidak ada, pakai yang pertama
@@ -40,6 +72,9 @@ class _LiveCameraState extends State<LiveCamera> {
         (c) => c.lensDirection == widget.lens,
         orElse: () => all.first,
       );
+
+      if (!mounted || _isDisposed || session != _globalSession) return;
+
       final controller = CameraController(
         cam,
         ResolutionPreset.medium,
@@ -47,25 +82,53 @@ class _LiveCameraState extends State<LiveCamera> {
         imageFormatGroup: widget.imageFormatGroup,
       );
       await controller.initialize();
-      if (!mounted) {
-        await controller.dispose();
+      if (!mounted || _isDisposed || session != _globalSession) {
+        await _safeRelease(controller);
         return;
       }
-      setState(() => _controller = controller);
+
+      _activeGlobalController = controller;
+      if (mounted) {
+        setState(() => _controller = controller);
+      }
       widget.onReady?.call(controller);
     } on CameraException catch (e) {
-      if (!mounted) return;
+      if (!mounted || session != _globalSession) return;
       setState(() {
         _error = e.code == 'CameraAccessDenied'
             ? 'Izin kamera ditolak. Aktifkan di pengaturan.'
             : 'Kamera gagal dibuka.';
       });
+    } catch (e) {
+      debugPrint('Kamera gagal: $e');
+      if (mounted && session == _globalSession) {
+        setState(() => _error = 'Kamera gagal dibuka.');
+      }
     }
+  }
+
+  /// Hentikan aliran gambar (bila ada), lalu matikan kamera tanpa melempar error.
+  static Future<void> _safeRelease(CameraController? c) async {
+    if (c == null) return;
+    try {
+      if (c.value.isStreamingImages) await c.stopImageStream();
+    } catch (_) {}
+    try {
+      await c.dispose();
+    } catch (_) {}
   }
 
   @override
   void dispose() {
-    _controller?.dispose();
+    _isDisposed = true;
+    final c = _controller;
+    _controller = null;
+    if (_activeGlobalController == c) {
+      _activeGlobalController = null;
+    }
+    if (c != null) {
+      _pendingDisposal = _safeRelease(c);
+    }
     super.dispose();
   }
 
@@ -100,7 +163,7 @@ class _LiveCameraState extends State<LiveCamera> {
       child: FittedBox(
         fit: BoxFit.cover,
         child: SizedBox(
-          width: size.height, 
+          width: size.height,
           height: size.width,
           child: CameraPreview(c),
         ),

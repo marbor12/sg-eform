@@ -43,8 +43,8 @@ class _NtbOcrScreenState extends State<NtbOcrScreen> {
     super.dispose();
   }
 
+  // Cukup periksa isi kolom, jadi isi manual tanpa pindai juga bisa lanjut.
   bool get _canContinue =>
-      _hasScanned &&
       _name.text.trim().isNotEmpty &&
       _id.text.trim().isNotEmpty &&
       _dob.text.trim().isNotEmpty;

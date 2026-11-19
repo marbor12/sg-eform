@@ -108,8 +108,11 @@ class ResultEtbScreen extends StatelessWidget {
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-          child: AppButton(label: 'Lanjut verifikasi', onPressed: () {
-            Navigator.of(context).push(
+          child: AppButton(
+            label: 'Lanjut verifikasi', 
+            onPressed: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+              Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (_) => const EtbOcrScreen()),
             );

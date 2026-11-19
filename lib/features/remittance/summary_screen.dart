@@ -36,9 +36,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
           changeLabel: 'Ganti nomor',
           infoText: 'OTP dipakai untuk mengonfirmasi pengajuan eForm remittance.',
           onVerified: (ctx) {
-            Navigator.pushReplacement(
+            Navigator.pushAndRemoveUntil(
               ctx,
               MaterialPageRoute(builder: (_) => const RemittanceStatusScreen()),
+              (route) => route.isFirst,
             );
           },
         ),

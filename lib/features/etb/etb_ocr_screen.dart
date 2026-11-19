@@ -8,8 +8,15 @@ import '../../core/widgets/id_camera_frame.dart';
 import '../shared/liveness_screen.dart';
 import 'etb_password_screen.dart';
 
-class EtbOcrScreen extends StatelessWidget {
+class EtbOcrScreen extends StatefulWidget {
   const EtbOcrScreen({super.key});
+
+  @override
+  State<EtbOcrScreen> createState() => _EtbOcrScreenState();
+}
+
+class _EtbOcrScreenState extends State<EtbOcrScreen> {
+  bool _showCamera = true;
 
   static const _rows = [
     ['Nama', 'TAN WEI LING'],
@@ -27,11 +34,27 @@ class EtbOcrScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AppTopBar(title: 'Verifikasi identitas', step: 1, total: 3),
+              const AppTopBar(title: 'Verifikasi identitas', step: 1, total: 3),
               const SizedBox(height: 24),
 
               // 1. area kamera (placeholder)
-              IdCameraFrame(hint: 'Arahkan KTP / FIN ke area ini'),
+              if (_showCamera)
+                const IdCameraFrame(hint: 'Arahkan KTP / FIN ke area ini')
+              else
+                Container(
+                  height: 210,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: AppColors.text,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Center(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.5,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
               const SizedBox(height: 14),
               Container(
                 width: double.infinity,
@@ -146,26 +169,32 @@ class EtbOcrScreen extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
           child: AppButton(
             label: 'Lanjut',
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => LivenessScreen(
-                  step: 2,
-                  total: 3,
-                  subtitle: 'Wajah dicocokkan dengan foto di NRIC dan data nasabah.',
-                  footer: 'Nasabah existing: tidak perlu validasi cabang bila face match lolos.',
-                  onPassed: (ctx) => Navigator.push(
-                    ctx,
-                    MaterialPageRoute(
-                      // email sementara; nanti dibagikan lewat Riverpod
-                      builder: (_) => const EtbPasswordScreen(
-                        email: 'weiling.tan@email.com',
+            onPressed: () async {
+              setState(() => _showCamera = false);
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => LivenessScreen(
+                    step: 2,
+                    total: 3,
+                    subtitle: 'Wajah dicocokkan dengan foto di NRIC dan data nasabah.',
+                    footer: 'Nasabah existing: tidak perlu validasi cabang bila face match lolos.',
+                    onPassed: (ctx) => Navigator.pushReplacement(
+                      ctx,
+                      MaterialPageRoute(
+                        // email sementara; nanti dibagikan lewat Riverpod
+                        builder: (_) => const EtbPasswordScreen(
+                          email: 'weiling.tan@email.com',
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ),
+              );
+              if (mounted) {
+                setState(() => _showCamera = true);
+              }
+            },
           ),
         ),
       ),
